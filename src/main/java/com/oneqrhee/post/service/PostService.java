@@ -23,11 +23,11 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<PostsResponseDto> findAllByOrderByModifiedAtDesc() {
         List<Post> postList = new ArrayList<>(postRepository.findAllByOrderByModifiedAtDesc());
-        List<PostsResponseDto> postsResponseDto = new ArrayList<>();
+        List<PostsResponseDto> postsResponseDtoList = new ArrayList<>();
         for (Post post : postList) {
-            postsResponseDto.add(new PostsResponseDto(post));
+            postsResponseDtoList.add(new PostsResponseDto(post));
         }
-        return postsResponseDto;
+        return postsResponseDtoList;
     }
 
     @Transactional(readOnly = true)
