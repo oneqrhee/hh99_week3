@@ -2,7 +2,6 @@ package com.oneqrhee.post.controller;
 
 import com.oneqrhee.post.dto.PostRequestDto;
 import com.oneqrhee.post.dto.PostResponseDto;
-import com.oneqrhee.post.dto.PostUpdateRequestDto;
 import com.oneqrhee.post.dto.PostsResponseDto;
 import com.oneqrhee.post.entity.Post;
 import com.oneqrhee.post.service.PostService;
@@ -14,32 +13,37 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/posts")
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("/api/post")
+    @GetMapping("")
     public List<PostsResponseDto> getPosts() {
        return postService.findAllByOrderByModifiedAtDesc();
     }
 
-    @GetMapping("/api/post/{id}")
+    @GetMapping("/{id}")
     public PostResponseDto getPost(@PathVariable Long id) {
         return postService.findById(id);
     }
 
-    @PostMapping("/api/post")
-    public Post createPost(@RequestBody PostRequestDto postRequestDto) {
+    @PostMapping("")
+    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto) {
         return postService.createPost(postRequestDto);
     }
 
-    @PutMapping("/api/post/{id}")
-    public ResponseEntity<String> updatePost(@PathVariable Long id, @RequestParam String password,
-                                             @RequestBody PostUpdateRequestDto postUpdateRequestDto) {
-        return postService.updatePost(id, password, postUpdateRequestDto);
+    @PostMapping("/{id}")
+    public ResponseEntity<String> checkPassword(@PathVariable Long id, @RequestParam String password){
+        return postService.checkPassword(id, password);
     }
 
-    @DeleteMapping("/api/post/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id, @RequestParam String password) {
-        return postService.deletePost(id, password);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
+        return postService.updatePost(id, postRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+        return postService.deletePost(id);
     }
 }

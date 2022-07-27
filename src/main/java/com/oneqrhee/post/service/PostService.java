@@ -2,7 +2,6 @@ package com.oneqrhee.post.service;
 
 import com.oneqrhee.post.dto.PostRequestDto;
 import com.oneqrhee.post.dto.PostResponseDto;
-import com.oneqrhee.post.dto.PostUpdateRequestDto;
 import com.oneqrhee.post.dto.PostsResponseDto;
 import com.oneqrhee.post.entity.Post;
 import com.oneqrhee.post.repository.PostRepository;
@@ -38,41 +37,33 @@ public class PostService {
     }
 
     @Transactional
-    public Post createPost(PostRequestDto postRequestDto){
+    public ResponseEntity<String> createPost(PostRequestDto postRequestDto){
         Post post = new Post(postRequestDto);
-        return postRepository.save(post);
+        postRepository.save(post);
+        return new ResponseEntity<>("글이 작성되었습니다", HttpStatus.CREATED);
     }
 
     @Transactional
-    public ResponseEntity<String> updatePost(Long id, String password, PostUpdateRequestDto postUpdateRequestDto) {
+    public ResponseEntity<String> updatePost(Long id, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다"));
-        int authorized = checkPassword(id, password);
-        if (authorized == 1) {
-            return new ResponseEntity<>("비밀번호가 틀렸습니다", HttpStatus.UNAUTHORIZED);
-        }
-        post.updatePost(postUpdateRequestDto);
+        post.updatePost(postRequestDto);
         return new ResponseEntity<>("글이 수정되었습니다", HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<String> deletePost(Long id, String password){
-        int authorized = checkPassword(id, password);
-        if (authorized == 1) {
-            return new ResponseEntity<>("비밀번호가 틀렸습니다", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<String> deletePost(Long id){
         postRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional(readOnly = true)
-    public int checkPassword(Long id, String password) {
-        int authorized = 0;
+    public ResponseEntity<String> checkPassword(Long id, String password) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다"));
         if (!post.getPassword().equals(password)) {
-            authorized = 1;
+            return new ResponseEntity<>("비밀번호가 틀렸습니다", HttpStatus.UNAUTHORIZED);
         }
-        return authorized;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

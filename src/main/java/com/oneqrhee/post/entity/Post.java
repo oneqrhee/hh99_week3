@@ -1,7 +1,6 @@
 package com.oneqrhee.post.entity;
 
 import com.oneqrhee.post.dto.PostRequestDto;
-import com.oneqrhee.post.dto.PostUpdateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,7 +33,10 @@ public class Post extends Timestamped{
         this.password = postRequestDto.getPassword();
     }
 
-    public void updatePost(PostUpdateRequestDto postUpdateRequestDto){
-        this.content = postUpdateRequestDto.getContent();
+    public void updatePost(PostRequestDto postRequestDto){
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+        this.author = postRequestDto.getAuthor();
+        this.password = postRequestDto.getPassword();
     }
 }
