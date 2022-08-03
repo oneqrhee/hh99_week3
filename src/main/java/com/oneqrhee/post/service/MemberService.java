@@ -2,7 +2,6 @@ package com.oneqrhee.post.service;
 
 import com.oneqrhee.post.dto.member.LoginDto;
 import com.oneqrhee.post.dto.member.MemberRequestDto;
-import com.oneqrhee.post.dto.member.MemberResponseDto;
 import com.oneqrhee.post.dto.member.TokenDto;
 import com.oneqrhee.post.entity.Member;
 import com.oneqrhee.post.entity.RefreshToken;
@@ -46,7 +45,7 @@ public class MemberService {
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
-        MemberResponseDto.of(memberRepository.save(member));
+        memberRepository.save(member);
         return new ResponseEntity<>("회원가입이 완료되었습니다.", HttpStatus.OK);
     }
 
