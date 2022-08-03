@@ -1,10 +1,12 @@
 package com.oneqrhee.post.entity;
 
-import com.oneqrhee.post.dto.PostRequestDto;
+import com.oneqrhee.post.dto.post.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,20 +25,18 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false)
-    private String password;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    private List<Comment> comments;
 
     public Post(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.author = postRequestDto.getAuthor();
-        this.password = postRequestDto.getPassword();
+        this.author = SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     public void updatePost(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.author = postRequestDto.getAuthor();
-        this.password = postRequestDto.getPassword();
+        this.author = SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

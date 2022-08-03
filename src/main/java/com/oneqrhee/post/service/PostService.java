@@ -1,13 +1,14 @@
 package com.oneqrhee.post.service;
 
-import com.oneqrhee.post.dto.PostRequestDto;
-import com.oneqrhee.post.dto.PostResponseDto;
-import com.oneqrhee.post.dto.PostsResponseDto;
+import com.oneqrhee.post.dto.post.PostRequestDto;
+import com.oneqrhee.post.dto.post.PostResponseDto;
+import com.oneqrhee.post.dto.post.PostsResponseDto;
 import com.oneqrhee.post.entity.Post;
 import com.oneqrhee.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,23 +48,21 @@ public class PostService {
     public ResponseEntity<String> updatePost(Long id, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다"));
+        if(!post.getAuthor().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+            return new ResponseEntity<>("작성자만 수정할 수 있습니다", HttpStatus.UNAUTHORIZED);
+        }
         post.updatePost(postRequestDto);
         return new ResponseEntity<>("글이 수정되었습니다", HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<String> deletePost(Long id){
+    public ResponseEntity<String> deletePost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다"));
+        if (!post.getAuthor().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+            return new ResponseEntity<>("작성자만 삭제할 수 있습니다", HttpStatus.UNAUTHORIZED);
+        }
         postRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Transactional(readOnly = true)
-    public ResponseEntity<String> checkPassword(Long id, String password) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다"));
-        if (!post.getPassword().equals(password)) {
-            return new ResponseEntity<>("비밀번호가 틀렸습니다", HttpStatus.UNAUTHORIZED);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

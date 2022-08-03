@@ -1,4 +1,4 @@
-package com.oneqrhee.post.dto;
+package com.oneqrhee.post.dto.post;
 
 import com.oneqrhee.post.entity.Post;
 import lombok.Getter;

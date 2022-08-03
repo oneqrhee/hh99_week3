@@ -1,9 +1,8 @@
 package com.oneqrhee.post.controller;
 
-import com.oneqrhee.post.dto.PostRequestDto;
-import com.oneqrhee.post.dto.PostResponseDto;
-import com.oneqrhee.post.dto.PostsResponseDto;
-import com.oneqrhee.post.entity.Post;
+import com.oneqrhee.post.dto.post.PostRequestDto;
+import com.oneqrhee.post.dto.post.PostResponseDto;
+import com.oneqrhee.post.dto.post.PostsResponseDto;
 import com.oneqrhee.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,36 +12,31 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api")
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("")
+    @GetMapping("/post")
     public List<PostsResponseDto> getPosts() {
        return postService.findAllByOrderByModifiedAtDesc();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/post/{id}")
     public PostResponseDto getPost(@PathVariable Long id) {
         return postService.findById(id);
     }
 
-    @PostMapping("")
+    @PostMapping("/auth/post")
     public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto) {
         return postService.createPost(postRequestDto);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<String> checkPassword(@PathVariable Long id, @RequestParam String password){
-        return postService.checkPassword(id, password);
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping("/auth/post/{id}")
     public ResponseEntity<String> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
         return postService.updatePost(id, postRequestDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/auth/post/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         return postService.deletePost(id);
     }

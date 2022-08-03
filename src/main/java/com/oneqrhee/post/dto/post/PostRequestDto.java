@@ -1,4 +1,4 @@
-package com.oneqrhee.post.dto;
+package com.oneqrhee.post.dto.post;
 
 import lombok.Getter;
 
@@ -6,6 +6,4 @@ import lombok.Getter;
 public class PostRequestDto {
     private String title;
     private String content;
-    private String author;
-    private String password;
 }
