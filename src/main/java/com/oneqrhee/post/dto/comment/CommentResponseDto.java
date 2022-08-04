@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class CommentResponseDto extends Timestamped {
+public class CommentResponseDto {
     private Long id;
     private String content;
     private String author;
