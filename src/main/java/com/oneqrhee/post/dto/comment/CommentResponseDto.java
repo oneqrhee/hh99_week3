@@ -1,7 +1,6 @@
 package com.oneqrhee.post.dto.comment;
 
 import com.oneqrhee.post.entity.Comment;
-import com.oneqrhee.post.entity.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

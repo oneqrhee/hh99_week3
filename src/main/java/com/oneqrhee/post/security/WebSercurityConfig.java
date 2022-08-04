@@ -2,7 +2,6 @@ package com.oneqrhee.post.security;
 
 import com.oneqrhee.post.jwt.JwtAccessDeniedHandler;
 import com.oneqrhee.post.jwt.JwtAuthenticationEntryPoint;
-import com.oneqrhee.post.jwt.JwtFilter;
 import com.oneqrhee.post.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
